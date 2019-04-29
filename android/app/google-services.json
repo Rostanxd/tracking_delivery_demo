@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "525500233558",
+    "firebase_url": "https://tracking-delivery-demo.firebaseio.com",
+    "project_id": "tracking-delivery-demo",
+    "storage_bucket": "tracking-delivery-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525500233558:android:bf9b575134c1e5e8",
+        "android_client_info": {
+          "package_name": "com.rostan.tracking_delivery_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525500233558-6abcp7h3ucu8859hcsj7l8mjuene0551.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNFPWAOlFDJ9HFWkgAbSWfV4ohWVbMdh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525500233558-6abcp7h3ucu8859hcsj7l8mjuene0551.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
