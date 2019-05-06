@@ -8,6 +8,7 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
   final _password = BehaviorSubject<String>();
   final _logging = BehaviorSubject<bool>();
   final _message = BehaviorSubject<String>();
+  final _firebaseUser = BehaviorSubject<FirebaseUser>();
 
   /// Observables
   Stream<String> get email => _email.transform(validateEmail);
@@ -21,6 +22,8 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
 
   Observable<String> get message => _message.stream;
 
+  Observable<FirebaseUser> get firebaseUser => _firebaseUser.stream;
+
   /// Functions
   Function(String) get changeEmail => _email.sink.add;
 
@@ -32,13 +35,12 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
         .signInWithEmailAndPassword(
             email: _email.value, password: _password.value)
         .then((response) {
-      print(response);
+      _firebaseUser.sink.add(response);
       _logging.sink.add(false);
-      _message.sink.add('Bienvenido!');
     }, onError: (error) {
-      print('Error: ${error.toString()}');
+          print(error);
       _logging.sink.add(false);
-      _message.sink.add('Usuario inválido!');
+      _message.sink.add('Usuario o contraseña inválida.');
     });
   }
 
@@ -48,5 +50,6 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
     _password.close();
     _logging.close();
     _message.close();
+    _firebaseUser.close();
   }
 }
