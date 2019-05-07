@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tracking_delivery_demo/blocs/bloc_provider.dart';
 import 'package:tracking_delivery_demo/blocs/login_bloc.dart';
 import 'package:tracking_delivery_demo/blocs/register_bloc.dart';
-import 'package:tracking_delivery_demo/screens/home/index.dart';
+import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
 import 'package:tracking_delivery_demo/screens/login/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,12 +15,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  RootBloc _rootBloc;
+
   @override
   void initState() {
     /// Listen to the Firebase user stream
     widget._loginBloc.firebaseUser.listen((user) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MyHomePage(user)));
+      _rootBloc.userLogged();
     });
 
     /// Control the message in the dialog
@@ -43,6 +45,12 @@ class _LoginPageState extends State<LoginPage> {
             });
     });
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _rootBloc = BlocProvider.of<RootBloc>(context);
+    super.didChangeDependencies();
   }
 
   @override

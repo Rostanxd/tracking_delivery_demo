@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tracking_delivery_demo/blocs/bloc_provider.dart';
-import 'package:tracking_delivery_demo/blocs/login_bloc.dart';
-import 'package:tracking_delivery_demo/screens/login/index.dart';
+import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
+import 'package:tracking_delivery_demo/root_page.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    LoginBloc _loginBloc = LoginBloc();
+    RootBloc _rootBloc = RootBloc();
 
     /// To set-up vertical orientation (portrait).
     SystemChrome.setPreferredOrientations([
@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: true,
         routes: <String, WidgetBuilder>{},
-        home: BlocProvider<LoginBloc>(
-          bloc: _loginBloc,
-          child: LoginPage(_loginBloc),
+        home: BlocProvider<RootBloc>(
+          bloc: _rootBloc,
+          child: RootPage(_rootBloc),
         )
     );
   }

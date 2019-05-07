@@ -1,18 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tracking_delivery_demo/blocs/bloc_provider.dart';
+import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
 
 class UserDrawer extends StatelessWidget {
   final FirebaseUser _user;
+  RootBloc _rootBloc;
 
   UserDrawer(this._user);
 
   @override
   Widget build(BuildContext context) {
+    _rootBloc = BlocProvider.of<RootBloc>(context);
+
     return Drawer(
       child: ListView(
         children: <Widget>[
           _header(),
+          ListTile(
+            onTap: (){
+              FirebaseAuth.instance.signOut();
+              _rootBloc.userLogged();
+            },
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Salir'),
+          )
         ],
       ),
     );
