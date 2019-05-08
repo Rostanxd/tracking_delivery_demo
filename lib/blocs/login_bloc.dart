@@ -38,7 +38,6 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
       _firebaseUser.sink.add(response);
       _logging.sink.add(false);
     }, onError: (error) {
-          print(error);
       _logging.sink.add(false);
       _message.sink.add('Usuario o contraseña inválida.');
     });

@@ -6,26 +6,26 @@ import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
 import 'package:tracking_delivery_demo/screens/login/register_page.dart';
 
 class LoginPage extends StatefulWidget {
-  final LoginBloc _loginBloc;
-
-  LoginPage(this._loginBloc);
-
   @override
   State<StatefulWidget> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   RootBloc _rootBloc;
+  LoginBloc _loginBloc;
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    _rootBloc = BlocProvider.of<RootBloc>(context);
+    _loginBloc = BlocProvider.of<LoginBloc>(context);
+
     /// Listen to the Firebase user stream
-    widget._loginBloc.firebaseUser.listen((user) {
+    _loginBloc.firebaseUser.listen((user) {
       _rootBloc.userLogged();
     });
 
     /// Control the message in the dialog
-    widget._loginBloc.message.listen((message) {
+    _loginBloc.message.listen((message) {
       if (message != null)
         showDialog(
             context: context,
@@ -44,12 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             });
     });
-    super.initState();
-  }
 
-  @override
-  void didChangeDependencies() {
-    _rootBloc = BlocProvider.of<RootBloc>(context);
     super.didChangeDependencies();
   }
 
@@ -109,15 +104,21 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  @override
+  void dispose() {
+    _loginBloc.dispose();
+    super.dispose();
+  }
+
   /// Field for the user's Id
   Widget _emailField() {
     return StreamBuilder(
-      stream: widget._loginBloc.email,
+      stream: _loginBloc.email,
       builder: (context, snapshot) {
         return Container(
           width: 300.0,
           child: TextField(
-            onChanged: widget._loginBloc.changeEmail,
+            onChanged: _loginBloc.changeEmail,
             decoration: InputDecoration(
                 labelText: 'E-mail',
                 labelStyle: TextStyle(
@@ -136,12 +137,12 @@ class _LoginPageState extends State<LoginPage> {
   /// Field for the user's password
   Widget _passwordField() {
     return StreamBuilder(
-      stream: widget._loginBloc.password,
+      stream: _loginBloc.password,
       builder: (context, snapshot) {
         return Container(
           width: 300.0,
           child: TextField(
-            onChanged: widget._loginBloc.changePassword,
+            onChanged: _loginBloc.changePassword,
             obscureText: true,
             decoration: InputDecoration(
                 labelText: 'Clave',
@@ -161,12 +162,12 @@ class _LoginPageState extends State<LoginPage> {
   /// Submit button for the form
   Widget _submitButton() {
     return StreamBuilder(
-        stream: widget._loginBloc.submitValid,
+        stream: _loginBloc.submitValid,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return InkWell(
             onTap: () {
               if (snapshot.data != null && snapshot.data) {
-                widget._loginBloc.logIn();
+                _loginBloc.logIn();
               }
             },
             child: Container(
@@ -207,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Streamer to build button login or circular progress indicator
   Widget _streamButtonSubmit() {
     return StreamBuilder(
-      stream: widget._loginBloc.logging,
+      stream: _loginBloc.logging,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         return snapshot.hasData && snapshot.data
             ? Container(
@@ -223,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Sign In button for the form
   Widget _signInButton() {
     return StreamBuilder(
-      stream: widget._loginBloc.logging,
+      stream: _loginBloc.logging,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         return snapshot.hasData && snapshot.data
             ? Container(

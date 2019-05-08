@@ -11,9 +11,12 @@ class RootBloc implements BlocBase {
   /// Functions
   void userLogged() async {
     await FirebaseAuth.instance.currentUser().then((firebaseUser){
-      print(firebaseUser.toString());
       _firebaseUser.sink.add(firebaseUser);
     });
+  }
+
+  void userLogOut() async {
+    await FirebaseAuth.instance.signOut().then((v) => userLogged());
   }
 
   @override

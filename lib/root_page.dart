@@ -16,9 +16,6 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  LoginBloc _loginBloc = LoginBloc();
-
-
   @override
   void initState() {
     widget._rootBloc.userLogged();
@@ -32,9 +29,9 @@ class _RootPageState extends State<RootPage> {
       builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot){
         return !snapshot.hasData ?
             BlocProvider(
-              bloc: _loginBloc,
-              child: LoginPage(_loginBloc),
-            ) : HomePage(snapshot.data);
+              bloc: LoginBloc(),
+              child: LoginPage(),
+            ) : HomePage(snapshot.data, widget._rootBloc);
       },
     );
   }
