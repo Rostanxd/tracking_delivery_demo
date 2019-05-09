@@ -9,7 +9,7 @@ class RootBloc implements BlocBase {
   final _user = BehaviorSubject<User>();
 
   /// Observables
-  Observable<FirebaseUser> get firebaseUser => _firebaseUser.stream;
+  ValueObservable<FirebaseUser> get firebaseUser => _firebaseUser.stream;
 
   ValueObservable<User> get user => _user.stream;
 

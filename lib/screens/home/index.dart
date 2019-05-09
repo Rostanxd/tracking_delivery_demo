@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:tracking_delivery_demo/blocs/bloc_provider.dart';
 import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
 import 'package:tracking_delivery_demo/components/user_drawer.dart';
+import 'package:tracking_delivery_demo/screens/home/dispatcher.dart';
+import 'package:tracking_delivery_demo/screens/home/driver.dart';
+import 'package:tracking_delivery_demo/screens/home/manager.dart';
 
 class HomePage extends StatefulWidget {
   final FirebaseUser _user;
@@ -16,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   RootBloc _rootBloc;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void didChangeDependencies() {
@@ -26,10 +30,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(''),
       ),
-      drawer: UserDrawer(widget._user, _rootBloc),
+      drawer: UserDrawer(_rootBloc),
       body: StreamBuilder(
         stream: Firestore.instance
             .collection('users')
@@ -39,35 +44,30 @@ class _HomePageState extends State<HomePage> {
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
-          return Center(
-            child: snapshot.hasData
-                ? checkRole(snapshot.data)
-                : CircularProgressIndicator(),
-          );
+          return snapshot.hasData
+              ? checkRole(snapshot.data)
+              : CircularProgressIndicator();
         },
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _scaffoldKey.currentState
+                .showSnackBar(SnackBar(content: Text('Genera novedad...')));
+          }),
     );
   }
 
-  Center checkRole(DocumentSnapshot snapshot) {
+  Widget checkRole(DocumentSnapshot snapshot) {
     switch (snapshot.data['role']) {
-      case '99':
-        return systemPage(snapshot);
+      case '02':
+        return DriverPage();
         break;
-      case '98':
-        return designPage(snapshot);
+      case '03':
+        return DispatcherPage();
         break;
       default:
-        return Center(child: Text(snapshot.data['first_name']));
+        return ManagerPage();
     }
-  }
-
-  /// Pages
-  Center systemPage(DocumentSnapshot snapshot) {
-    return Center(child: Text('Sistemas'));
-  }
-
-  Center designPage(DocumentSnapshot snapshot) {
-    return Center(child: Text('Diseño'));
   }
 }

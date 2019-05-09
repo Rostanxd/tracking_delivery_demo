@@ -1,29 +1,63 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
+import 'package:tracking_delivery_demo/models/user.dart';
+import 'package:tracking_delivery_demo/screens/settings/settings.dart';
 
-class UserDrawer extends StatelessWidget {
-  final FirebaseUser _user;
+class UserDrawer extends StatefulWidget {
   final RootBloc _rootBloc;
 
-  UserDrawer(this._user, this._rootBloc);
+  UserDrawer(this._rootBloc);
+
+  @override
+  _UserDrawerState createState() => _UserDrawerState();
+}
+
+class _UserDrawerState extends State<UserDrawer> {
+  final List<Widget> _listChildren = List<Widget>();
+
+  FirebaseUser _firebaseUser;
+
+  User _user;
+
+  void _loadDrawer(BuildContext context) {
+    _listChildren.clear();
+
+    /// Adding the header
+    _listChildren.add(_header());
+
+    /// Adding options by the profile
+    if (_user.role != '02') {
+      _listChildren.add(ListTile(
+        title: Text('Configuración'),
+        leading: Icon(Icons.settings),
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SettingsPage()));
+        },
+      ));
+    }
+
+    /// Adding exit option
+    _listChildren.add(Divider());
+    _listChildren.add(ListTile(
+      title: Text('Salir'),
+      leading: Icon(Icons.exit_to_app),
+      onTap: () {
+        Navigator.pop(context);
+        widget._rootBloc.userLogOut();
+      },
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
+    _firebaseUser = widget._rootBloc.firebaseUser.value;
+    _user = widget._rootBloc.user.value;
+
+    _loadDrawer(context);
     return Drawer(
-      child: ListView(
-        children: <Widget>[
-          _header(),
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              _rootBloc.userLogOut();
-            },
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Salir'),
-          ),
-        ],
-      ),
+      child: ListView(children: _listChildren),
     );
   }
 
@@ -47,19 +81,19 @@ class UserDrawer extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: Text(
-                    '${_rootBloc.user.value.firstName} ${_rootBloc.user.value.lastName}',
+                    '${_user.firstName} ${_user.lastName}',
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                   ),
                 ),
                 Container(
                   child: Text(
-                    _user.email,
+                    _firebaseUser.email,
                     style: TextStyle(color: Colors.white, fontSize: 14.0),
                   ),
                 ),
                 Container(
                   child: Text(
-                    '${_rootBloc.user.value.roleName}',
+                    '${_user.roleName}',
                     style: TextStyle(color: Colors.white, fontSize: 14.0),
                   ),
                 ),
