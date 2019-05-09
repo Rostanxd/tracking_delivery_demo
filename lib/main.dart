@@ -9,8 +9,6 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    RootBloc _rootBloc = RootBloc();
-
     /// To set-up vertical orientation (portrait).
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -18,11 +16,11 @@ class MyApp extends StatelessWidget {
     ]);
 
     return MaterialApp(
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{},
         home: BlocProvider<RootBloc>(
-          bloc: _rootBloc,
-          child: RootPage(_rootBloc),
+          bloc: RootBloc(),
+          child: RootPage(),
         )
     );
   }

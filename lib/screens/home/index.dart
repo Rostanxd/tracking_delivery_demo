@@ -1,27 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tracking_delivery_demo/blocs/bloc_provider.dart';
 import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
 import 'package:tracking_delivery_demo/components/user_drawer.dart';
 
 class HomePage extends StatefulWidget {
   final FirebaseUser _user;
-  final RootBloc _rootBloc;
 
-  HomePage(this._user, this._rootBloc);
+  HomePage(this._user);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  RootBloc _rootBloc;
+
+  @override
+  void didChangeDependencies() {
+    _rootBloc = BlocProvider.of<RootBloc>(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
       ),
-      drawer: UserDrawer(widget._user, widget._rootBloc),
+      drawer: UserDrawer(widget._user, _rootBloc),
       body: StreamBuilder(
         stream: Firestore.instance
             .collection('users')

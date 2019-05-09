@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^4.1.0+1
 
   # Firebase dependencies
-  firebase_analytics: ^1.1.0
+  # firebase_analytics: ^1.1.0
   firebase_auth: ^0.8.4+5
   firebase_core: ^0.3.0
   cloud_firestore: ^0.10.1

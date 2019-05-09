@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tracking_delivery_demo/blocs/root_bloc.dart';
@@ -22,7 +21,7 @@ class UserDrawer extends StatelessWidget {
             },
             leading: Icon(Icons.exit_to_app),
             title: Text('Salir'),
-          )
+          ),
         ],
       ),
     );
@@ -36,35 +35,35 @@ class UserDrawer extends StatelessWidget {
             Container(
                 height: 60.0,
                 width: 60.0,
-                margin: EdgeInsets.only(left: 10.0),
+                margin: EdgeInsets.only(left: 10.0, right: 20.0),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage('assets/img/user_one.jpg')))),
-            Container(
-              child: StreamBuilder(
-                stream: Firestore.instance
-                    .collection('users')
-                    .document(_user.uid)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError)
-                    return Text('Error: ${snapshot.error}');
-
-                  return Container(
-                    margin: EdgeInsets.only(left: 20.0),
-                    child: snapshot.hasData
-                        ? Text(
-                            '${snapshot.data['first_name']} ${snapshot.data['last_name']}',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18.0),
-                          )
-                        : CircularProgressIndicator(),
-                  );
-                },
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '${_rootBloc.user.value.firstName} ${_rootBloc.user.value.lastName}',
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    _user.email,
+                    style: TextStyle(color: Colors.white, fontSize: 14.0),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    '${_rootBloc.user.value.roleName}',
+                    style: TextStyle(color: Colors.white, fontSize: 14.0),
+                  ),
+                ),
+              ],
             )
           ],
         ),

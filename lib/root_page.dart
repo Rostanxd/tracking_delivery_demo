@@ -7,31 +7,34 @@ import 'package:tracking_delivery_demo/screens/home/index.dart';
 import 'package:tracking_delivery_demo/screens/login/index.dart';
 
 class RootPage extends StatefulWidget {
-  final RootBloc _rootBloc;
-
-  RootPage(this._rootBloc);
-
   @override
   State<StatefulWidget> createState() => _RootPageState();
 }
 
 class _RootPageState extends State<RootPage> {
+  RootBloc _rootBloc;
+
   @override
   void initState() {
-    widget._rootBloc.userLogged();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _rootBloc = BlocProvider.of<RootBloc>(context);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: widget._rootBloc.firebaseUser,
+      stream: _rootBloc.firebaseUser,
       builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot){
         return !snapshot.hasData ?
             BlocProvider(
               bloc: LoginBloc(),
               child: LoginPage(),
-            ) : HomePage(snapshot.data, widget._rootBloc);
+            ) : HomePage(snapshot.data);
       },
     );
   }
