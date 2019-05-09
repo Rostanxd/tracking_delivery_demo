@@ -22,6 +22,7 @@ class _RootPageState extends State<RootPage> {
   @override
   void didChangeDependencies() {
     _rootBloc = BlocProvider.of<RootBloc>(context);
+    _rootBloc.userLogged();
     super.didChangeDependencies();
   }
 
